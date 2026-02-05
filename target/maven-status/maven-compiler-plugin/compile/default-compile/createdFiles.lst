@@ -1,0 +1,11 @@
+Main.class
+Models\Genero.class
+Models\Clasificacion.class
+Models\Filmografia.class
+Models\Factura.class
+Models\Pais.class
+Models\Reparto.class
+DbManager\DbManager.class
+Models\Cuenta.class
+DAOs\FilmografiaDAO.class
+Models\Acceso.class
