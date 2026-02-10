@@ -119,7 +119,7 @@ public class FilmografiaDAO {
             db.conectar();
             stmnt = db.getConexion().prepareStatement(INSERT);
 
-            cargarDatos(stmnt, f); // Carga parámetros 1 al 5
+            cargarDatos(stmnt, f); // Carga parámetros del 1 al 5
 
             stmnt.executeUpdate();
             System.out.println("Película insertada correctamente.");
@@ -140,11 +140,9 @@ public class FilmografiaDAO {
             db.conectar();
             stmnt = db.getConexion().prepareStatement(UPDATE);
 
-            // 1. Cargar los datos básicos (parámetros 1 al 5)
-            cargarDatos(stmnt, f);
+            cargarDatos(stmnt, f); // Carga parámetros del 1 al 5
             
-            // 2. Cargar el ID para el WHERE (parámetro 6)
-            stmnt.setInt(6, f.getId());
+            stmnt.setInt(6, f.getId()); // Carga el parámetro 6
 
             int rows = stmnt.executeUpdate();
             if (rows > 0) {
