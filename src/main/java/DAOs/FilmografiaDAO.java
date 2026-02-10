@@ -5,7 +5,6 @@ import Models.Filmografia;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
 
 public class FilmografiaDAO {
 
@@ -43,11 +42,24 @@ public class FilmografiaDAO {
     // FUNCION CERRAR ESTADOS
     private void cerrarEstado(PreparedStatement stmnt, ResultSet rs) throws SQLException {
         try {
-            if (rs != null) rs.close();
-            if (stmnt != null) stmnt.close();
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmnt != null) {
+                stmnt.close();
+            }
         } catch (SQLException e) {
             throw new SQLException("Error al cerrar recursos: " + e.getMessage());
         }
+    }
+
+    // FUNCION CARGAR DATOS (Mapea los 5 campos comunes a INSERT y UPDATE)
+    private void cargarDatos(PreparedStatement stmnt, Filmografia f) throws SQLException {
+        stmnt.setString(1, f.getTitulo());
+        stmnt.setDate(2, f.getFechaEstreno());
+        stmnt.setString(3, f.getSinopsis());
+        stmnt.setInt(4, f.getPaisId());
+        stmnt.setInt(5, f.getClasificacionId());
     }
 
     // LISTAR LAS PELÍCULAS
@@ -107,11 +119,7 @@ public class FilmografiaDAO {
             db.conectar();
             stmnt = db.getConexion().prepareStatement(INSERT);
 
-            stmnt.setString(1, f.getTitulo());
-            stmnt.setDate(2, f.getFechaEstreno());
-            stmnt.setString(3, f.getSinopsis());
-            stmnt.setInt(4, f.getPaisId());
-            stmnt.setInt(5, f.getClasificacionId());
+            cargarDatos(stmnt, f); // Carga parámetros 1 al 5
 
             stmnt.executeUpdate();
             System.out.println("Película insertada correctamente.");
@@ -132,11 +140,10 @@ public class FilmografiaDAO {
             db.conectar();
             stmnt = db.getConexion().prepareStatement(UPDATE);
 
-            stmnt.setString(1, f.getTitulo());
-            stmnt.setDate(2, f.getFechaEstreno());
-            stmnt.setString(3, f.getSinopsis());
-            stmnt.setInt(4, f.getPaisId());
-            stmnt.setInt(5, f.getClasificacionId());
+            // 1. Cargar los datos básicos (parámetros 1 al 5)
+            cargarDatos(stmnt, f);
+            
+            // 2. Cargar el ID para el WHERE (parámetro 6)
             stmnt.setInt(6, f.getId());
 
             int rows = stmnt.executeUpdate();
@@ -177,34 +184,4 @@ public class FilmografiaDAO {
             db.desconectar();
         }
     }
-
 }
-
-
-/*
-private void cerrarEstado(PreparedStatement stmnt, ResultSet rs) {
-    try {
-        if (rs != null) rs.close();
-        if (stmnt != null) stmnt.close();
-    } catch (SQLException e) {
-        System.out.println("Error al cerrar recursos: " + e.getMessage());
-    }
-}
-//ANTES
-finally {
-    try {
-        if (rs != null) rs.close();
-        if (stmnt != null) stmnt.close();
-        db.desconectar();
-    } catch (SQLException e) {
-        System.out.println("Error cerrando recursos: " + e.getMessage());
-    }
-}
-
-//DESPUES
-finally {
-    cerrarEstado(stmnt, rs);
-    db.desconectar();
-}
-
-*/
