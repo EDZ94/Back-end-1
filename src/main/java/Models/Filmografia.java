@@ -1,10 +1,5 @@
-
 package Models;
 
-/**
- *
- * @author EDU
- */
 import java.sql.Date;
 
 public class Filmografia {
@@ -76,14 +71,10 @@ public class Filmografia {
         this.clasificacion_id = clasificacionId;
     }
     
-
     // TO STRING
     @Override
     public String toString() {
         return "Filmografia{" + "id=" + id + ", titulo=" + titulo + ", fecha_estreno=" + fecha_estreno + ", sinopsis=" + sinopsis + ", pais_id=" + pais_id + ", clasificacion_id=" + clasificacion_id + '}';
     }
-    
-       
-    //METODO
-    
+        
 }
