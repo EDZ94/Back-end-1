@@ -144,8 +144,8 @@ public class FilmografiaDAO {
             
             stmnt.setInt(6, f.getId()); // Carga el parámetro 6
 
-            int rows = stmnt.executeUpdate();
-            if (rows > 0) {
+            int filasAfectadas = stmnt.executeUpdate();
+            if (filasAfectadas > 0) {
                 System.out.println("Película actualizada correctamente.");
             } else {
                 System.out.println("No se encontró la película con ID: " + f.getId());
@@ -168,8 +168,8 @@ public class FilmografiaDAO {
             stmnt = db.getConexion().prepareStatement(DELETE);
             stmnt.setInt(1, id);
 
-            int rows = stmnt.executeUpdate();
-            if (rows > 0) {
+            int filasAfectadas = stmnt.executeUpdate();
+            if (filasAfectadas > 0) {
                 System.out.println("Película eliminada correctamente.");
             } else {
                 System.out.println("No se encontró la película con ID: " + id);
