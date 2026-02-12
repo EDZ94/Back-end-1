@@ -5,12 +5,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import Configuracion.Logger;
 
 
 public abstract class DAO<T> {
 
     //Atributos
     protected DbManager db;
+    protected Logger logger = new Logger();
 
     //Constructor
     public DAO() {
@@ -22,6 +24,7 @@ public abstract class DAO<T> {
         if (stmt != null) try {
             stmt.close();
         } catch (SQLException e) {
+            logger.error("Error al cerrar Statement. ");
             throw new SQLException("Error al cerrar Statement. ", e);
         }
         if (rs != null) try {
@@ -37,6 +40,7 @@ public abstract class DAO<T> {
         try {
             db.getConexion().rollback();
         } catch (SQLException e) {
+            logger.error("Error al cerrar Rollback. ");
             throw new SQLException("Error al hacer Rollback. ", e);
         }
     }
