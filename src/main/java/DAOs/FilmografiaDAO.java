@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class FilmografiaDAO {
+public class FilmografiaDAO extends DAO<Filmografia> {
 
     // ATRIBUTO CONEXION
     private DbManager db;
@@ -39,22 +39,9 @@ public class FilmografiaDAO {
         }
     }
 
-    // FUNCION CERRAR ESTADOS
-    private void cerrarEstado(PreparedStatement stmnt, ResultSet rs) throws SQLException {
-        try {
-            if (rs != null) {
-                rs.close();
-            }
-            if (stmnt != null) {
-                stmnt.close();
-            }
-        } catch (SQLException e) {
-            throw new SQLException("Error al cerrar recursos: " + e.getMessage());
-        }
-    }
-
     // FUNCION CARGAR DATOS (Mapea los 5 campos comunes a INSERT y UPDATE)
-    private void cargarDatos(PreparedStatement stmnt, Filmografia f) throws SQLException {
+    @Override
+    protected void cargarDatos(PreparedStatement stmnt, Filmografia f) throws SQLException {
         stmnt.setString(1, f.getTitulo());
         stmnt.setDate(2, f.getFechaEstreno());
         stmnt.setString(3, f.getSinopsis());
@@ -63,6 +50,7 @@ public class FilmografiaDAO {
     }
 
     // LISTAR LAS PELÍCULAS
+    @Override
     public void listAll() throws SQLException {
         PreparedStatement stmnt = null;
         ResultSet rs = null;
@@ -80,12 +68,13 @@ public class FilmografiaDAO {
         } catch (SQLException e) {
             System.out.println("Error LISTALL: " + e.getMessage());
         } finally {
-            cerrarEstado(stmnt, rs);
+            cerrarEstados(stmnt, rs);
             db.desconectar();
         }
     }
 
     // LISTAR UNA PELÍCULA POR ID
+    @Override
     public void listOne(int id) throws SQLException {
         PreparedStatement stmnt = null;
         ResultSet rs = null;
@@ -106,12 +95,13 @@ public class FilmografiaDAO {
         } catch (SQLException e) {
             System.out.println("Error LISTONE: " + e.getMessage());
         } finally {
-            cerrarEstado(stmnt, rs);
+            cerrarEstados(stmnt, rs);
             db.desconectar();
         }
     }
 
     // INSERTAR PELÍCULA
+    @Override
     public void insert(Filmografia f) throws SQLException {
         PreparedStatement stmnt = null;
 
@@ -122,29 +112,31 @@ public class FilmografiaDAO {
             cargarDatos(stmnt, f); // Carga parámetros del 1 al 5
 
             stmnt.executeUpdate();
+            db.getConexion().commit();
             System.out.println("Película insertada correctamente.");
 
         } catch (SQLException e) {
             System.out.println("Error INSERT: " + e.getMessage());
+            hacerRollback(db);
         } finally {
-            cerrarEstado(stmnt, null);
+            cerrarEstados(stmnt, null);
             db.desconectar();
         }
     }
 
     // ACTUALIZAR PELÍCULA
+    @Override
     public void update(Filmografia f) throws SQLException {
         PreparedStatement stmnt = null;
 
         try {
             db.conectar();
             stmnt = db.getConexion().prepareStatement(UPDATE);
-
             cargarDatos(stmnt, f); // Carga parámetros del 1 al 5
-            
             stmnt.setInt(6, f.getId()); // Carga el parámetro 6
-
             int filasAfectadas = stmnt.executeUpdate();
+            db.getConexion().commit();
+            
             if (filasAfectadas > 0) {
                 System.out.println("Película actualizada correctamente.");
             } else {
@@ -153,13 +145,15 @@ public class FilmografiaDAO {
 
         } catch (SQLException e) {
             System.out.println("Error UPDATE: " + e.getMessage());
+            hacerRollback(db);
         } finally {
-            cerrarEstado(stmnt, null);
+            cerrarEstados(stmnt, null);
             db.desconectar();
         }
     }
 
     // ELIMINAR PELÍCULA
+    @Override
     public void delete(int id) throws SQLException {
         PreparedStatement stmnt = null;
 
@@ -167,8 +161,9 @@ public class FilmografiaDAO {
             db.conectar();
             stmnt = db.getConexion().prepareStatement(DELETE);
             stmnt.setInt(1, id);
-
             int filasAfectadas = stmnt.executeUpdate();
+            db.getConexion().commit();
+            
             if (filasAfectadas > 0) {
                 System.out.println("Película eliminada correctamente.");
             } else {
@@ -177,8 +172,9 @@ public class FilmografiaDAO {
 
         } catch (SQLException e) {
             System.out.println("Error DELETE: " + e.getMessage());
+            hacerRollback(db);
         } finally {
-            cerrarEstado(stmnt, null);
+            cerrarEstados(stmnt, null);
             db.desconectar();
         }
     }
