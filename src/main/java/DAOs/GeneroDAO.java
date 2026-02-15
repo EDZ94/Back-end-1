@@ -1,59 +1,51 @@
 package DAOs;
 
 import DbManager.DbManager;
-import Models.Filmografia;
+import Models.Genero;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilmografiaDAO extends DAO<Filmografia> {
+public class GeneroDAO extends DAO<Genero> {
 
     // ATRIBUTOS QUERIES
-    private static final String LISTALL = "SELECT * FROM Filmografia";
-    private static final String LISTONE = "SELECT * FROM Filmografia WHERE id = ?";
-    private static final String INSERT = "INSERT INTO Filmografia (titulo, fecha_estreno, sinopsis, pais_id, clasificacion_id) VALUES (?,?,?,?,?)";
-    private static final String UPDATE = "UPDATE Filmografia SET titulo=?, fecha_estreno=?, sinopsis=?, pais_id=?, clasificacion_id=? WHERE id=?";
-    private static final String DELETE = "DELETE FROM Filmografia WHERE id=?";
+    private static final String LISTALL = "SELECT * FROM Pais";
+    private static final String LISTONE = "SELECT * FROM Pais WHERE id = ?";
+    private static final String INSERT = "INSERT INTO Pais (nombre) VALUES (?)";
+    private static final String UPDATE = "UPDATE Pais SET nombre=? WHERE id=?";
+    private static final String DELETE = "DELETE FROM Pais WHERE id=?";
 
     // CONSTRUCTOR
-    public FilmografiaDAO() {
+    public GeneroDAO() {
         super(); //Hereda db y logger
     }
 
-    // FUNCION CREAR FILMOGRAFÍA
-    public Filmografia crearFilmografia(ResultSet rs) throws SQLException {
+    // FUNCION CREAR GENERO
+    public Genero crearGenero(ResultSet rs) throws SQLException {
         try {
-            return new Filmografia(
+            return new Genero(
                     rs.getInt("id"),
-                    rs.getString("titulo"),
-                    rs.getDate("fecha_estreno"),
-                    rs.getString("sinopsis"),
-                    rs.getInt("pais_id"),
-                    rs.getInt("clasificacion_id")
+                    rs.getString("nombre")
             );
         } catch (SQLException e) {
-            throw new SQLException("Error al convertir ResultSet a Filmografia: " + e.getMessage());
+            throw new SQLException("Error al convertir ResultSet a Genero: " + e.getMessage());
         }
     }
 
-    // FUNCION CARGAR DATOS (Mapea los 5 campos comunes a INSERT y UPDATE)
+    // FUNCION CARGAR DATOS
     @Override
-    protected void cargarDatos(PreparedStatement stmnt, Filmografia f) throws SQLException {
-        stmnt.setString(1, f.getTitulo());
-        stmnt.setDate(2, f.getFechaEstreno());
-        stmnt.setString(3, f.getSinopsis());
-        stmnt.setInt(4, f.getPaisId());
-        stmnt.setInt(5, f.getClasificacionId());
-    }
+    protected void cargarDatos(PreparedStatement stmnt, Genero g) throws SQLException {
+        stmnt.setString(1, g.getNombre());
+}
 
-    // LISTAR LAS PELÍCULAS
+    // LISTAR GENEROS
     @Override
-    public List<Filmografia> listAll() throws SQLException {
+    public List<Genero> listAll() throws SQLException {
         PreparedStatement stmnt = null;
         ResultSet rs = null;
-        List<Filmografia> arrayFilmo = new ArrayList<>();
+        List<Genero> arrayGenero = new ArrayList<>();
 
         try {
             db.conectar();
@@ -61,8 +53,8 @@ public class FilmografiaDAO extends DAO<Filmografia> {
             rs = stmnt.executeQuery();
 
             while (rs.next()) {
-                Filmografia f = crearFilmografia(rs);
-                arrayFilmo.add(f);
+                Genero g = crearGenero(rs);
+                arrayGenero.add(g);
             }
 
         } catch (SQLException e) {
@@ -71,22 +63,22 @@ public class FilmografiaDAO extends DAO<Filmografia> {
             cerrarEstados(stmnt, rs);
             db.desconectar();
         }
-        return arrayFilmo;
+        return arrayGenero;
     }
 
-    // LISTAR UNA PELÍCULA POR ID
+    // LISTAR UN GENERO POR ID
     @Override
-    public Filmografia listOne(int id) throws SQLException {
+    public Genero listOne(int id) throws SQLException {
         PreparedStatement stmnt = null;
         ResultSet rs = null;
-        Filmografia filmo = new Filmografia();
+        Genero g = new Genero();
 
         try {
             db.conectar();
             stmnt = db.getConexion().prepareStatement(LISTONE);
             stmnt.setInt(1, id);
             rs = stmnt.executeQuery();
-            filmo = crearFilmografia(rs);
+            g = crearGenero(rs);
             
         } catch (SQLException e) {
             System.out.println("Error LISTONE: " + e.getMessage());
@@ -94,23 +86,23 @@ public class FilmografiaDAO extends DAO<Filmografia> {
             cerrarEstados(stmnt, rs);
             db.desconectar();
         }
-        return filmo;
+        return g;
     }
 
-    // INSERTAR PELÍCULA
+    // INSERTAR GENERO
     @Override
-    public void insert(Filmografia f) throws SQLException {
+    public void insert(Genero g) throws SQLException {
         PreparedStatement stmnt = null;
 
         try {
             db.conectar();
             stmnt = db.getConexion().prepareStatement(INSERT);
 
-            cargarDatos(stmnt, f); // Carga parámetros del 1 al 5
+            cargarDatos(stmnt, g); 
 
             stmnt.executeUpdate();
             db.getConexion().commit();
-            System.out.println("Película insertada correctamente.");
+            System.out.println("Genero insertado correctamente.");
 
         } catch (SQLException e) {
             System.out.println("Error INSERT: " + e.getMessage());
@@ -121,23 +113,23 @@ public class FilmografiaDAO extends DAO<Filmografia> {
         }
     }
 
-    // ACTUALIZAR PELÍCULA
+    // ACTUALIZAR GENERO
     @Override
-    public void update(Filmografia f) throws SQLException {
+    public void update(Genero g) throws SQLException {
         PreparedStatement stmnt = null;
 
         try {
             db.conectar();
             stmnt = db.getConexion().prepareStatement(UPDATE);
-            cargarDatos(stmnt, f); // Carga parámetros del 1 al 5
-            stmnt.setInt(6, f.getId()); // Carga el parámetro 6
+            cargarDatos(stmnt, g); 
+            stmnt.setInt(2, g.getId()); 
             int filasAfectadas = stmnt.executeUpdate();
             db.getConexion().commit();
             
             if (filasAfectadas > 0) {
-                System.out.println("Película actualizada correctamente.");
+                System.out.println("Genero actualizado correctamente.");
             } else {
-                System.out.println("No se encontró la película con ID: " + f.getId());
+                System.out.println("No se encontró el genero con ID: " + g.getId());
             }
 
         } catch (SQLException e) {
@@ -149,7 +141,7 @@ public class FilmografiaDAO extends DAO<Filmografia> {
         }
     }
 
-    // ELIMINAR PELÍCULA
+    // ELIMINAR GENERO
     @Override
     public void delete(int id) throws SQLException {
         PreparedStatement stmnt = null;
@@ -162,9 +154,9 @@ public class FilmografiaDAO extends DAO<Filmografia> {
             db.getConexion().commit();
             
             if (filasAfectadas > 0) {
-                System.out.println("Película eliminada correctamente.");
+                System.out.println("Genero eliminado correctamente.");
             } else {
-                System.out.println("No se encontró la película con ID: " + id);
+                System.out.println("No se encontró el genero con ID: " + id);
             }
 
         } catch (SQLException e) {

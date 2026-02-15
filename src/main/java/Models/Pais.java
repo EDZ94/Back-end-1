@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Models;
 
-/**
- *
- * @author EDU
- */
 public class Pais {
     
     //ATRIBUTOS
@@ -36,6 +28,12 @@ public class Pais {
     public Pais(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
+    }
+    
+    //CONSTRUCTOR POR DEFECTO
+    public Pais() {
+        this.id = 0;
+        this.nombre = "";
     }
 
     

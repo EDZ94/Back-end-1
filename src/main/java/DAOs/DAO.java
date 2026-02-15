@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import Configuracion.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public abstract class DAO<T> {
@@ -46,9 +48,9 @@ public abstract class DAO<T> {
     }
 
     //Metodos
-    public abstract void listAll() throws SQLException;
+    public abstract List<T> listAll() throws SQLException; // devuelve una lista T
 
-    public abstract void listOne(int id) throws SQLException;
+    public abstract T listOne(int id) throws SQLException; //devuelve un T
 
     public abstract void insert(T dato_insert) throws SQLException;
 

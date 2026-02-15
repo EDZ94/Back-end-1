@@ -1,59 +1,55 @@
 package DAOs;
 
 import DbManager.DbManager;
-import Models.Filmografia;
+import Models.Reparto;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilmografiaDAO extends DAO<Filmografia> {
+public class RepartoDAO extends DAO<Reparto> {
 
     // ATRIBUTOS QUERIES
-    private static final String LISTALL = "SELECT * FROM Filmografia";
-    private static final String LISTONE = "SELECT * FROM Filmografia WHERE id = ?";
-    private static final String INSERT = "INSERT INTO Filmografia (titulo, fecha_estreno, sinopsis, pais_id, clasificacion_id) VALUES (?,?,?,?,?)";
-    private static final String UPDATE = "UPDATE Filmografia SET titulo=?, fecha_estreno=?, sinopsis=?, pais_id=?, clasificacion_id=? WHERE id=?";
-    private static final String DELETE = "DELETE FROM Filmografia WHERE id=?";
+    private static final String LISTALL = "SELECT * FROM Reparto";
+    private static final String LISTONE = "SELECT * FROM Reparto WHERE id_reparto = ?";
+    private static final String INSERT = "INSERT INTO Reparto (id_filmografia, nombre_actor, papel) VALUES (?, ?, ?)";
+    private static final String UPDATE = "UPDATE Reparto SET id_filmografia=?, SET nombre_actor=?, SET papel=? WHERE id_reparto=?";
+    private static final String DELETE = "DELETE FROM Reparto WHERE id_reparto=?";
 
     // CONSTRUCTOR
-    public FilmografiaDAO() {
+    public RepartoDAO() {
         super(); //Hereda db y logger
     }
 
-    // FUNCION CREAR FILMOGRAFÍA
-    public Filmografia crearFilmografia(ResultSet rs) throws SQLException {
+    // FUNCION CREAR REPARTO
+    public Reparto crearReparto(ResultSet rs) throws SQLException {
         try {
-            return new Filmografia(
-                    rs.getInt("id"),
-                    rs.getString("titulo"),
-                    rs.getDate("fecha_estreno"),
-                    rs.getString("sinopsis"),
-                    rs.getInt("pais_id"),
-                    rs.getInt("clasificacion_id")
+            return new Reparto(
+                    rs.getInt("id_reparto"),
+                    rs.getInt("id_filmografia"),
+                    rs.getString("nombre_actor"),
+                    rs.getString("papel")
             );
         } catch (SQLException e) {
-            throw new SQLException("Error al convertir ResultSet a Filmografia: " + e.getMessage());
+            throw new SQLException("Error al convertir ResultSet a Reparto: " + e.getMessage());
         }
     }
 
-    // FUNCION CARGAR DATOS (Mapea los 5 campos comunes a INSERT y UPDATE)
+    // FUNCION CARGAR DATOS 
     @Override
-    protected void cargarDatos(PreparedStatement stmnt, Filmografia f) throws SQLException {
-        stmnt.setString(1, f.getTitulo());
-        stmnt.setDate(2, f.getFechaEstreno());
-        stmnt.setString(3, f.getSinopsis());
-        stmnt.setInt(4, f.getPaisId());
-        stmnt.setInt(5, f.getClasificacionId());
+    protected void cargarDatos(PreparedStatement stmnt, Reparto r) throws SQLException {
+        stmnt.setInt(1, r.getId_filmografia());
+        stmnt.setString(2, r.getNombre_actor());
+        stmnt.setString(3, r.getPapel());
     }
 
-    // LISTAR LAS PELÍCULAS
+    // LISTAR REPARTO
     @Override
-    public List<Filmografia> listAll() throws SQLException {
+    public List<Reparto> listAll() throws SQLException {
         PreparedStatement stmnt = null;
         ResultSet rs = null;
-        List<Filmografia> arrayFilmo = new ArrayList<>();
+        List<Reparto> arrayReparto = new ArrayList<>();
 
         try {
             db.conectar();
@@ -61,8 +57,8 @@ public class FilmografiaDAO extends DAO<Filmografia> {
             rs = stmnt.executeQuery();
 
             while (rs.next()) {
-                Filmografia f = crearFilmografia(rs);
-                arrayFilmo.add(f);
+                Reparto r = crearReparto(rs);
+                arrayReparto.add(r);
             }
 
         } catch (SQLException e) {
@@ -71,46 +67,46 @@ public class FilmografiaDAO extends DAO<Filmografia> {
             cerrarEstados(stmnt, rs);
             db.desconectar();
         }
-        return arrayFilmo;
+        return arrayReparto;
     }
 
-    // LISTAR UNA PELÍCULA POR ID
+    // LISTAR REPARTO POR ID
     @Override
-    public Filmografia listOne(int id) throws SQLException {
+    public Reparto listOne(int id) throws SQLException {
         PreparedStatement stmnt = null;
         ResultSet rs = null;
-        Filmografia filmo = new Filmografia();
+        Reparto r = new Reparto();
 
         try {
             db.conectar();
             stmnt = db.getConexion().prepareStatement(LISTONE);
             stmnt.setInt(1, id);
             rs = stmnt.executeQuery();
-            filmo = crearFilmografia(rs);
-            
+            r = crearReparto(rs);
+
         } catch (SQLException e) {
             System.out.println("Error LISTONE: " + e.getMessage());
         } finally {
             cerrarEstados(stmnt, rs);
             db.desconectar();
         }
-        return filmo;
+        return r;
     }
 
-    // INSERTAR PELÍCULA
+    // INSERTAR REPARTO
     @Override
-    public void insert(Filmografia f) throws SQLException {
+    public void insert(Reparto r) throws SQLException {
         PreparedStatement stmnt = null;
 
         try {
             db.conectar();
             stmnt = db.getConexion().prepareStatement(INSERT);
 
-            cargarDatos(stmnt, f); // Carga parámetros del 1 al 5
+            cargarDatos(stmnt, r);
 
             stmnt.executeUpdate();
             db.getConexion().commit();
-            System.out.println("Película insertada correctamente.");
+            System.out.println("Reparto insertado correctamente.");
 
         } catch (SQLException e) {
             System.out.println("Error INSERT: " + e.getMessage());
@@ -121,23 +117,23 @@ public class FilmografiaDAO extends DAO<Filmografia> {
         }
     }
 
-    // ACTUALIZAR PELÍCULA
+    // ACTUALIZAR REPARTO
     @Override
-    public void update(Filmografia f) throws SQLException {
+    public void update(Reparto r) throws SQLException {
         PreparedStatement stmnt = null;
 
         try {
             db.conectar();
             stmnt = db.getConexion().prepareStatement(UPDATE);
-            cargarDatos(stmnt, f); // Carga parámetros del 1 al 5
-            stmnt.setInt(6, f.getId()); // Carga el parámetro 6
+            cargarDatos(stmnt, r);
+            stmnt.setInt(4, r.getId_reparto());
             int filasAfectadas = stmnt.executeUpdate();
             db.getConexion().commit();
-            
+
             if (filasAfectadas > 0) {
-                System.out.println("Película actualizada correctamente.");
+                System.out.println("Reparto actualizada correctamente.");
             } else {
-                System.out.println("No se encontró la película con ID: " + f.getId());
+                System.out.println("No se encontró la película con ID: " + r.getId_reparto());
             }
 
         } catch (SQLException e) {
@@ -149,7 +145,7 @@ public class FilmografiaDAO extends DAO<Filmografia> {
         }
     }
 
-    // ELIMINAR PELÍCULA
+    // ELIMINAR REPARTO
     @Override
     public void delete(int id) throws SQLException {
         PreparedStatement stmnt = null;
@@ -160,11 +156,11 @@ public class FilmografiaDAO extends DAO<Filmografia> {
             stmnt.setInt(1, id);
             int filasAfectadas = stmnt.executeUpdate();
             db.getConexion().commit();
-            
+
             if (filasAfectadas > 0) {
-                System.out.println("Película eliminada correctamente.");
+                System.out.println("Reparto eliminado correctamente.");
             } else {
-                System.out.println("No se encontró la película con ID: " + id);
+                System.out.println("No se encontró el reparto con ID: " + id);
             }
 
         } catch (SQLException e) {
@@ -175,4 +171,5 @@ public class FilmografiaDAO extends DAO<Filmografia> {
             db.desconectar();
         }
     }
+
 }

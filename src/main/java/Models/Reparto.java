@@ -55,7 +55,14 @@ public class Reparto {
         this.nombre_actor = nombre_actor;
         this.papel = papel;
     }
-
+    
+    //CONSTRUCTOR POR DEFECTO
+    public Reparto() {
+        this.id_reparto = 0;
+        this.id_filmografia = 0;
+        this.nombre_actor = "";
+        this.papel = "";
+    }
     
     // TO STRING
     @Override
@@ -65,5 +72,9 @@ public class Reparto {
     
     
     //METODO
+
+    public String getNombre() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }
