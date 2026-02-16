@@ -3,12 +3,6 @@ package Models;
 
 import java.sql.Date;
 
-
-/**
- *
- * @author EDU
- */
-
 public class Acceso {
     
     //ATRIBUTOS
