@@ -1,18 +1,12 @@
-
 package Models;
 
-/**
- *
- * @author EDU
- */
 public class Clasificacion {
-    
-    //ATRIBUTOS
+
+    // ATRIBUTOS
     private int id;
     private String nombre;
 
-    
-    //GET AND SET
+    // GET AND SET
     public int getId() {
         return id;
     }
@@ -29,8 +23,7 @@ public class Clasificacion {
         this.nombre = nombre;
     }
 
-    
-    //CONSTRUCTOR
+    // CONSTRUCTOR
     public Clasificacion(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
@@ -41,9 +34,5 @@ public class Clasificacion {
     public String toString() {
         return "Clasificacion{" + "id=" + id + ", nombre=" + nombre + '}';
     }
-    
-    
-    //METODO
-    
-    
+
 }

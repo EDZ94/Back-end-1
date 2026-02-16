@@ -1,14 +1,10 @@
-
 package Models;
 
 import java.sql.Date;
 
-/**
- *
- * @author EDU
- */
 public class Factura {
-    
+
+    // ATRIBUTOS
     private int num_factura;
     private int suscripcion_id;
     private int cuenta_id;
@@ -16,8 +12,7 @@ public class Factura {
     private String metodo_pago;
     private Date fecha_factura;
 
-    
-    //GET AND SET
+    // GET AND SET
     public int getNum_factura() {
         return num_factura;
     }
@@ -66,7 +61,6 @@ public class Factura {
         this.fecha_factura = fecha_factura;
     }
 
-    
     // CONSTRUCTOR
     public Factura(int num_factura, int suscripcion_id, int cuenta_id, double importe_pvp, String metodo_pago, Date fecha_factura) {
         this.num_factura = num_factura;
@@ -77,14 +71,10 @@ public class Factura {
         this.fecha_factura = fecha_factura;
     }
 
-    
     // TO STRING
     @Override
     public String toString() {
         return "Factura{" + "num_factura=" + num_factura + ", suscripcion_id=" + suscripcion_id + ", cuenta_id=" + cuenta_id + ", importe_pvp=" + importe_pvp + ", metodo_pago=" + metodo_pago + ", fecha_factura=" + fecha_factura + '}';
     }
-    
-    //METODO
-    
-    
+
 }

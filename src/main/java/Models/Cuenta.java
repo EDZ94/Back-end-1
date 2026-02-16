@@ -1,20 +1,14 @@
-
 package Models;
 
-/**
- *
- * @author EDU
- */
 public class Cuenta {
-    
+
     // ATRIBUTOS
     private int id_cuenta;
     private String tipo_cuenta;
     private String nombre;
     private String password_hash;
-    
-    
-    //GET AND SET
+
+    // GET AND SET
     public int getId_cuenta() {
         return id_cuenta;
     }
@@ -47,7 +41,7 @@ public class Cuenta {
         this.password_hash = password_hash;
     }
 
-    //CONSTRUCTOR
+    // CONSTRUCTOR
     public Cuenta(int id_cuenta, String tipo_cuenta, String nombre, String password_hash) {
         this.id_cuenta = id_cuenta;
         this.tipo_cuenta = tipo_cuenta;
@@ -55,12 +49,10 @@ public class Cuenta {
         this.password_hash = password_hash;
     }
 
-    //TO STRING
+    // TO STRING
     @Override
     public String toString() {
         return "Cuenta{" + "id_cuenta=" + id_cuenta + ", tipo_cuenta=" + tipo_cuenta + ", nombre=" + nombre + ", password_hash=" + password_hash + '}';
     }
-    
-    //METODO
-    
+
 }
