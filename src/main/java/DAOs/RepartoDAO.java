@@ -18,7 +18,7 @@ public class RepartoDAO extends DAO<Reparto> {
     private static final String DELETE = "DELETE FROM Reparto WHERE id_reparto=?";
 
     // CONSTRUCTOR
-    public RepartoDAO() {
+    public RepartoDAO() throws SQLException {
         super(); //Hereda db y logger
     }
 

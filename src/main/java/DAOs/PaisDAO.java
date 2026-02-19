@@ -18,7 +18,7 @@ public class PaisDAO extends DAO<Pais>{
     private static final String DELETE = "DELETE FROM Pais WHERE id=?";
 
     // CONSTRUCTOR
-    public PaisDAO() {
+    public PaisDAO() throws SQLException {
         super(); //Hereda db y logger
     }
 

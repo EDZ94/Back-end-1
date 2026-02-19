@@ -21,6 +21,11 @@ public abstract class DAO<T> {
         db = new DbManager();
     }
 
+    public DbManager getDb() {
+        return db;
+    }
+    
+    
     //Funciones que he implementado
     protected void cerrarEstados(PreparedStatement stmt, ResultSet rs) throws SQLException {
         if (stmt != null) try {

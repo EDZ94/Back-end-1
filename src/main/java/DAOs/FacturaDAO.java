@@ -1,4 +1,4 @@
-package DAOs;
+/*package DAOs;
 
 import Models.Factura;
 import java.sql.PreparedStatement;
@@ -135,4 +135,4 @@ public class FacturaDAO extends DAO<Factura> {
             db.desconectar();
         }
     }
-}
+}*/

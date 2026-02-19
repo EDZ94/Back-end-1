@@ -18,7 +18,7 @@ public class GeneroDAO extends DAO<Genero> {
     private static final String DELETE = "DELETE FROM Pais WHERE id=?";
 
     // CONSTRUCTOR
-    public GeneroDAO() {
+    public GeneroDAO() throws SQLException {
         super(); //Hereda db y logger
     }
 

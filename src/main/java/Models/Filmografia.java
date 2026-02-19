@@ -1,9 +1,10 @@
 package Models;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class Filmografia {
-    
+
     //ATRIBUTOS
     private int id;
     private String titulo;
@@ -11,7 +12,7 @@ public class Filmografia {
     private String sinopsis;
     private int pais_id;
     private int clasificacion_id;
-    
+
     //GET AND SET
     public int getId() {
         return id;
@@ -60,7 +61,7 @@ public class Filmografia {
     public void setClasificacionId(int clasificacionId) {
         this.clasificacion_id = clasificacionId;
     }
-    
+
     //CONSTRUCTOR
     public Filmografia(int id, String titulo, Date fechaEstreno, String sinopsis, int paisId, int clasificacionId) {
         this.id = id;
@@ -70,21 +71,30 @@ public class Filmografia {
         this.pais_id = paisId;
         this.clasificacion_id = clasificacionId;
     }
-    
+
     //CONSTRUCTOR POR DEFECTO
-    public Filmografia(){
-            this.id = 0;
-            this.titulo = "";
-            this.fecha_estreno = null;
-            this.sinopsis = "";
-            this.pais_id = 0;
-            this.clasificacion_id = 0;        
+    public Filmografia() {
+        this.id = 0;
+        this.titulo = "";
+        this.fecha_estreno = null;
+        this.sinopsis = "";
+        this.pais_id = 0;
+        this.clasificacion_id = 0;
     }
-    
+
+    //CONSTRUCTOR PARA API
+    public Filmografia(String titulo) {
+        this.titulo = titulo;
+        this.fecha_estreno = null;
+        this.sinopsis = "Prueba";
+        this.pais_id = 1;
+        this.clasificacion_id = 3;
+    }
+
     // TO STRING
     @Override
     public String toString() {
         return "Filmografia{" + "id=" + id + ", titulo=" + titulo + ", fecha_estreno=" + fecha_estreno + ", sinopsis=" + sinopsis + ", pais_id=" + pais_id + ", clasificacion_id=" + clasificacion_id + '}';
     }
-        
+
 }

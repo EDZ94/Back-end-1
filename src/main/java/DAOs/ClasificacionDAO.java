@@ -1,4 +1,4 @@
-package DAOs;
+/*package DAOs;
 
 import DbManager.DbManager;
 import Models.Clasificacion;
@@ -118,4 +118,4 @@ public class ClasificacionDAO extends DAO<Clasificacion> {
             db.desconectar();
         }
     }
-}
+}*/

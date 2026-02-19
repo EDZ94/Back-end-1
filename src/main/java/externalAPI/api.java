@@ -21,9 +21,9 @@ public class api {
     
     
     //Este metodo va a ser nuestro listone pero en vez de buscar en la bbdd, va a buscar en la api externa
-    public static void searchMovie(String query) throws IOException{
+    public static JsonArray searchMovie(String query) throws IOException{
         
-        //Creamos un cliente http para hacer la peticion a la api es necseario para enviar la solicitud y recibir la respuesta
+        //Creamos un cliente http para hacer la peticion a la api es necesario para enviar la solicitud y recibir la respuesta
         OkHttpClient client = new OkHttpClient();
         
         //Codificamos el nombre de la pelicula para que sea segura para usar en una URL es necsario para manejar caracteres especiales
@@ -31,38 +31,32 @@ public class api {
         //Con el codequery codifico la clave para evitar errores, borrar espacios, evita deletes...
         String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
         
-        //Construimos la URL de la peticion, incluyendo la API KEY y el nombres de la pelicula codificado
+        //Construimos la URL de la peticion, incluyendo la API KEY y el nombre de la pelicula codificado
         String url = BASE_URL + "/search/movie?api_key=" + API_KEY + "&query=" + encodedQuery;
         
         //Creamos un objeto de tipo request que define la url usando un patron builder (get por defecto)
         Request request = new Request.Builder().url(url).build();
+        JsonArray results = null;
         
         try (Response response = client.newCall(request).execute()){
             
             //Si falla paramos el programa aqui
             if (!response.isSuccessful()){
                 System.out.println("Error en la peticion: " + response);
-                return;
+                return results;
             }
             
-            //Creamos el objeto String de la response que nos ha lelgado. Si todo va bien, leemos la respuesta (viene en formato Json) y la guardamos en un String para luego pasarsela a un JsonObjetct
+            //Creamos el objeto String de la response que nos ha llegado. Si todo va bien, leemos la respuesta (viene en formato Json) y la guardamos en un String para luego pasarsela a un JsonObjetct
             String responseBody = response.body().string();
             
             //Creamos un objeto Json, y el String de la respuesta la convertimos en objeto JSON
             JsonObject json = JsonParser.parseString(responseBody).getAsJsonObject();
             
-            
             //Obtenemos un resultado en un Array de JSON, cada elemento del array representa una pelicula 
-            JsonArray results = json.getAsJsonArray("results");
-            System.out.println("Resultados de busqueda");
-            
-            //Iteramos en los resultados cogiendo el titulo y su release_date
-            for (int i = 0; i < results.size(); i++){
-                JsonObject movie = results.get(i).getAsJsonObject();
-                System.out.println("- " + movie.get("title").getAsString() + " (" + movie.get("release_date").getAsString() + ")");
-            }
-            
+            results = json.getAsJsonArray("results");
+                        
         }
+        return results;
         
         
     }

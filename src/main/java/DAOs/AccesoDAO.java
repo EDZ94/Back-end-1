@@ -1,4 +1,4 @@
-package DAOs;
+/*package DAOs;
 
 import DbManager.DbManager;
 import Models.Acceso;
@@ -134,4 +134,4 @@ public class AccesoDAO extends DAO<Acceso> {
         }
     }
 
-}
+}*/

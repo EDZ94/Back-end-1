@@ -18,7 +18,7 @@ public class FilmografiaDAO extends DAO<Filmografia> {
     private static final String DELETE = "DELETE FROM Filmografia WHERE id=?";
 
     // CONSTRUCTOR
-    public FilmografiaDAO() {
+    public FilmografiaDAO() throws SQLException {
         super(); //Hereda db y logger
     }
 
@@ -104,6 +104,9 @@ public class FilmografiaDAO extends DAO<Filmografia> {
 
         try {
             db.conectar();
+            db.getConexion().setAutoCommit(false);
+            System.out.println("Conectado en insert");
+            System.out.println(db.getConexion());
             stmnt = db.getConexion().prepareStatement(INSERT);
 
             cargarDatos(stmnt, f); // Carga parámetros del 1 al 5

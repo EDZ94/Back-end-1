@@ -1,4 +1,4 @@
-package DAOs;
+/*package DAOs;
 
 import Models.Cuenta;
 import java.sql.PreparedStatement;
@@ -134,4 +134,4 @@ public class CuentaDAO extends DAO<Cuenta> {
             db.desconectar();
         }
     }
-}
+}*/
